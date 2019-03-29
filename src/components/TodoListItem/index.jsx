@@ -17,7 +17,7 @@ export default class TodoListItem extends Component {
       done
     } = this.props;
 
-    let classNames = done ? 'todo-list-item done' : 'todo-list-item';
+    let classNames = 'todo-list-item';
 
     if (done) {
       classNames += ' done';

@@ -6,9 +6,6 @@ import './todo-list.css';
 export default class TodoList extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      // testIsOver: false,
-    };
   }
 
   render() {
@@ -20,6 +17,7 @@ export default class TodoList extends Component {
         <li key={ item.id } className="list-group-item">
           <TodoListItem
             label={ item.label }
+            done={ item.done }
             important={ item.important }
             onDeleted={ () => onDeleted(item.id) }
             onToggleImportant={ () => onToggleImportant(item.id) }

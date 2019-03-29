@@ -12,9 +12,9 @@ export class App extends Component {
     this.maxId = 100;
     this.state = {
       todoData: [
-        { label: 'Learn React', important: false, id: 1 },
-        { label: 'Learn Redux', important: true, id: 2 },
-        { label: 'Have a lunch', important: false, id: 3 }
+        { label: 'Learn React', done: false, important: false, id: 1 },
+        { label: 'Learn Redux', done: false, important: true, id: 2 },
+        { label: 'Have a lunch', done: false, important: false, id: 3 }
       ]
     };
   }
@@ -23,6 +23,7 @@ export class App extends Component {
 
     const newItem = {
       label: text,
+      done: false,
       important: false,
       id: this.maxId++
     };
@@ -54,20 +55,46 @@ export class App extends Component {
     })
   }
 
+  toggleProperty(arr, id, propName) {
+    const index = arr.findIndex((el) => el.id === id);
+
+    const oldItem = arr[index];
+    const newItem = {...oldItem,
+      [propName]: !oldItem[propName]};
+
+    return [
+      ...arr.slice(0, index),
+      newItem,
+      ...arr.slice(index + 1)
+    ];
+  }
+
   onToggleImportant(id) {
+    this.setState((state) => {
+      return {
+        todoData: this.toggleProperty(state.todoData, id, 'important')
+      }
+    });
     console.log('Toggle Important', id)
   };
 
   onToggleDone(id) {
+    this.setState((state) => {
+      return {
+        todoData: this.toggleProperty(state.todoData, id, 'done')
+      }
+    });
     console.log('Toggle Done', id)
   };
 
   render() {
     const { todoData } = this.state;
+    const doneCount = todoData.filter((el) => el.done).length;
+    const todoCount = todoData.length - doneCount;
 
     return (
       <div className="todo-app">
-        <AppHeader toDo={1} done={3} />
+        <AppHeader toDo={ todoCount } done={ doneCount } />
         <div className="top-panel d-flex">
           <SearchPanel />
           <ItemStatusFilter />
@@ -81,7 +108,7 @@ export class App extends Component {
         />
 
         <ItemAddForm
-          onAddItem={ ()=> this.addItem('Hello') }
+          onAddItem={ (text) => this.addItem(text) }
         />
       </div>
     );
