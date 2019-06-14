@@ -5,9 +5,6 @@ import './app-header.css';
 export default class AppHeader extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      // testIsOver: false,
-    };
   }
 
   render() {

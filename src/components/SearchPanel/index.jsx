@@ -5,9 +5,15 @@ export default class SearchPanel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // testIsOver: false,
+      searchValue: ''
     };
   }
+
+  onSearchField = (e) => {
+    const searchValue = e.target.value;
+    this.setState({ searchValue });
+    this.props.onSearchField(searchValue);
+  };
 
   render() {
     return (
@@ -15,6 +21,8 @@ export default class SearchPanel extends Component {
         type="text"
         className="form-control search-input"
         placeholder="type to search"
+        value={ this.state.searchValue }
+        onChange={  this.onSearchField }
       />
     );
   }
