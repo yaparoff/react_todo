@@ -17,7 +17,7 @@ export class App extends Component {
         { label: 'Have a lunch', done: false, important: false, id: 3 }
       ],
       searchValue: '',
-      filter: ''
+      filterValue: 'all'
     };
   }
 
@@ -37,38 +37,17 @@ export class App extends Component {
     });
   }
 
-  showNeededItems(id) {
-    console.log(id);
-    if (id === 'done') {
-      this.setState((state) => {
-        [...state.todoData].map(item => {
-          if (item.done === true) {
-            // console.log(item);
-            const newArray = [
-              item
-            ];
-            console.log(newArray);
-            return {
-              todoData: newArray
-            }
-          }
-        });
-      });
-    } else if (id === 'active') {
-      this.setState((state) => {
-        [...state.todoData].map(item => {
-          if (item.done === false) {
-            // console.log(item);
-            const newArray = [
-              item
-            ];
-            console.log(newArray);
-            return {
-              todoData: newArray
-            }
-          }
-        });
-      });
+  onFilterItems = (filterValue) => {
+    this.setState({ filterValue });
+  };
+
+  filterItems(items, filterValue) {
+    if (filterValue === 'active') {
+      return items.filter((item) => !item.done);
+    } else if (filterValue === 'done') {
+      return items.filter((item) => item.done);
+    } else {
+      return items;
     }
   }
 
@@ -142,10 +121,12 @@ export class App extends Component {
   };
 
   render() {
-    const { todoData, searchValue } = this.state;
-    const visibleItems = this.search(todoData, searchValue);
+    const { todoData, searchValue, filterValue } = this.state;
+    const visibleItems = this.search(
+        this.filterItems(todoData, filterValue), searchValue);
     const doneCount = todoData.filter((el) => el.done).length;
     const todoCount = todoData.length - doneCount;
+
 
     return (
       <div className="todo-app">
@@ -155,7 +136,8 @@ export class App extends Component {
             onSearchField={ this.onSearchField }
           />
           <ItemStatusFilter
-            onGetTypeFilter={ (id) => this.showNeededItems(id) }
+              filter={ filterValue }
+              onFilterItems={ this.onFilterItems }
           />
         </div>
 

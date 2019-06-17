@@ -8,69 +8,42 @@ export default class ItemStatusFilter extends Component {
     this.state = {
       btns: [
         {
-          id: 'all',
-          text: 'All',
-          active: true
+          name: 'all',
+          text: 'All'
         },
         {
-          id: 'active',
-          text: 'Active',
-          active: false
+          name: 'active',
+          text: 'Active'
         },
         {
-          id: 'done',
-          text: 'Done',
-          active: false
+          name: 'done',
+          text: 'Done'
         }
       ]
     };
   }
 
-  handleClick(id) {
-    this.setState((state) => {
-      state.btns.map(btn => {
-        btn.active = false;
-        if (btn.id === id) {
-          btn.active = true;
-          this.props.onGetTypeFilter(btn.id)
-        }
-      });
-
-
-
-      return {
-
-      }
-    })
-  }
-
   render() {
+    const { filter, onFilterItems } = this.props;
 
+    const buttons = this.state.btns.map(({ name, text }) => {
+      const isActive = name === filter;
+      const classNames = 'btn ' + (isActive ? 'btn-info' : 'btn-outline-secondary');
 
-
-
-    let classNames = 'btn';
-
-    // if (active) {
-    //   classNames += ' btn-info';
-    // } else {
-    //   classNames += ' btn-outline-secondary';
-    // }
+      return (
+        <button
+          key={name}
+          type="button"
+          className={ classNames }
+          onClick= { () => onFilterItems(name) }>
+          { text }
+        </button>
+      )
+    });
 
     return (
       <div className="btn-group">
-
-        { this.state.btns.map(btn =>
-          <button
-            key={ btn.id }
-            type="button"
-            className={ btn.active ?  'btn btn-info' : 'btn btn-outline-secondary' }
-            onClick={
-              () => this.handleClick(btn.id)
-            }
-          > { btn.text }</button>
-        )}
-
+        { buttons }
       </div>
     );
   }

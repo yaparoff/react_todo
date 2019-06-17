@@ -11,7 +11,6 @@ export default class TodoList extends Component {
   render() {
     const { todos, onDeleted, onToggleImportant, onToggleDone } = this.props;
 
-
     const elements = todos.map((item) => {
       return (
         <li key={ item.id } className="list-group-item">
